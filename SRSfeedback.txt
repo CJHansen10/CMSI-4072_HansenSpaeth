@@ -1,0 +1,67 @@
+
+Documentation Feedback ~ Deliverable #2
+Software Requirements Specification
+Initial Development Schedule
+CMSI 4072 Spring 2026
+=======================================
+
+COMPONENT BREAKDOWN:
+   Strengths:
+      Clear decomposition into UI & Menu, Gameplay, and Content & Persistence.
+      Subcomponents (CSUs) named and described in detail.
+      Architecture diagram (text-based) reinforces structure.
+   Suggestions:
+      Add explicit mapping from components to lifecycle or data-flow diagrams.
+      Include brief rationale for each CSC’s boundaries (why it is separated).
+
+FUNCTIONAL REQUIREMENTS:
+   Strengths:
+      All major gameplay, UI, and persistence functions are clearly stated.
+      Requirements use proper “shall” phrasing.
+      Requirements are externally observable and testable.
+   Suggestions:
+      Some requirements could be more quantifiable (e.g., character roster
+         count, minimum number of arenas).
+      Consider adding negative requirements (what the system shall NOT do),
+         if relevant, to limit scope.
+      Add explicit error-handling behaviors (e.g., failure to load a profile).
+
+PERFORMANCE REQUIREMENTS:
+   Strengths:
+      Very strong quantification: FPS, latency, load times, memory footprint.
+      Requirements are realistic and verifiable.
+      Stability and long‑session performance are addressed.
+   Suggestions:
+      Could identify minimum hardware test bench used to measure compliance.
+      Could separate "hard" vs. "soft" performance constraints.
+
+ENVIRONMENT REQUIREMENTS:
+   Strengths:
+      Clear development environment (hardware, OS, tools).
+      Clear deployment targets, including minimum hardware.
+      Accessibility and offline operation called out.
+   Suggestions:
+      Consider adding OS‑level permissions or file system assumptions.
+      Provide version numbers or stability expectations for required runtimes.
+
+OVERALL ASSESSMENT:
+   Category                          Points
+   Component Breakdown               1.0/1
+   Functional Requirements           4.0/4
+   Performance Requirements          2.0/2
+   Environment Requirements          1.0/1
+                                     =====
+   Subtotal                          8.0/8
+   Preliminary Schedule              2.0/2   [Freebee]
+   ------------------------------------------------------
+   Total Percentage:   10/10 = 100% which is an A-plus
+
+
+OVERALL ASSESSMENT:
+You actually did the best of any SRS I've read so far and I'm halfway
+through the projects!  You could make the document even stronger by
+including some of the suggestions for the next go-round.
+
+Nice work on this deliverable ~ keep up the good work!
+
+
