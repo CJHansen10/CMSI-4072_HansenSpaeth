@@ -1,0 +1,49 @@
+
+
+HW 2 - Stephens Book Chapters 5 and 6
+CMSI 4072 Spring 2026
+
+Category        Weight     Earned
+===========    ========    ======
+Problem 5.1    [ 5 pts.]      5.0
+Problem 5.2    [ 5 pts.]      5.0
+Problem 5.4    [ 5 pts.]      3.0
+Problem 5.6    [ 5 pts.]      5.0
+Problem 5.8    [10 pts.]     10.0
+Problem 6.1    [10 pts.]     10.0
+Problem 6.2    [10 pts.]      5.0
+
+       Subtotal [50 max]     50.0
+              Your Total     43.0
+
+         Letter grade   B
+
+=================
+SPECIFIC COMMENTS:
+
+Problem 5.1 ~ correct
+
+Problem 5.2 ~ correct
+
+Problem 5.4 ~ Problem 5.4 asks about two users playing over the Internet.
+   Your answer does not propose a networked architecture
+   (e.g., client/server, SOA) here which would be the way to go.
+
+Problem 5.6 ~ This response actually addresses the networked chess scenario
+   (client/server with authoritative state), but Problem 5.6 asks about
+   ClassyDraw’s database structure and maintenance.  Wrong problem.
+
+Problem 5.8 ~ correct, I think...  Maybe this should be the one above?
+
+Problem 6.1 ~ correct, I think...
+
+Problem 6.2 ~ Your diagram is NOT a 'class' diagram.  It shows some kind of
+program 'flow', not a class hierarchy which was asked for.  Partial credit
+for the work you did
+
+
+It's a bit hard to follow this submission, since in the latter problems
+you seem to be one off with your answers from what the questions are
+asking.  I did my best to correlate them...
+
+You have 8 answers but there were only 7 problems.
