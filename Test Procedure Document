@@ -1,1 +1,376 @@
+# 8.0 Software Test Plan
 
+## 8.1 Introduction
+
+This section defines the **Software Test Plan** for the Pirate Fighterz project. It describes the testing strategy, planned test coverage, and step-by-step procedures used to verify that the software meets its functional and non-functional requirements.
+
+This test plan serves two purposes:
+
+1. **Planning and coverage** — identifies what will be tested at the **unit**, **integration**, and **acceptance** levels.
+2. **Execution guidance** — provides the actual procedures, inputs, expected outputs, and pass/fail criteria used to demonstrate that the system works as intended.
+
+Testing will include both **positive tests** (valid inputs/expected usage) and **negative tests** (invalid inputs/unexpected usage/error handling). The plan is structured to align with the CMMI-style format required for this course, combining test plan and test procedure details into a single document.
+
+Testing for Pirate Fighterz focuses on the following major Computer Software Components (CSCs):
+
+- **UI & Menu CSC** (title screen, navigation, login/logout, settings, character/map selection)
+- **Gameplay CSC** (movement, jump, attack, block, collision, health/damage, win condition)
+- **Content & Persistence CSC** (player profile data, settings, unlocked content/save/load behavior)
+
+---
+
+## 8.2 Unit Test Plan
+
+Unit testing verifies that individual modules (CSUs/classes/scripts/functions) operate correctly in isolation before being integrated into larger components. Unit tests will primarily target Unity C# scripts and helper methods that support UI, gameplay logic, and persistence behavior.
+
+Testing methods used at the unit level include:
+
+- **Automated unit tests** (where practical) using Unity Test Framework (Edit Mode / Play Mode)
+- **Manual script-level tests** via Unity test scenes and debug UI
+- **Boundary-value and invalid-input testing**
+- **Positive and negative case testing**
+
+### 8.2.1 Unit Tests Planned
+
+The following unit tests are planned for Pirate Fighterz modules.
+
+#### Unit Test Table
+
+| Test ID | Module / CSU | Test Name | Inputs | Expected Output | Stub/Mock |
+|---|---|---|---|---|---|
+| UT-01 | `PlayerMovementController` | Horizontal Movement Valid Input | Move axis = -1, 0, +1 | Character moves left / idle / right at configured speed | None |
+| UT-02 | `PlayerMovementController` | Jump Allowed Only When Grounded | Jump input while grounded | Character jumps once; vertical velocity applied | Mock ground-check if needed |
+| UT-03 | `PlayerMovementController` | Jump Rejected When Airborne (Negative) | Jump input while airborne | No second jump (unless double-jump enabled) | Mock ground-check if needed |
+| UT-04 | `CombatController` | Light Attack Damage Application | Valid attack input while in range | Opponent health decreases by configured damage amount | Mock opponent hitbox |
+| UT-05 | `CombatController` | Attack Out of Range (Negative) | Attack input with no target in hitbox | No damage applied | Mock opponent hitbox |
+| UT-06 | `BlockController` | Block Reduces/Prevents Damage | Incoming hit while blocking | Damage reduced or prevented per design | Mock incoming hit event |
+| UT-07 | `HealthController` | Health Cannot Drop Below Zero | Repeated damage exceeding max HP | Health clamps to 0; KO state triggers once | None |
+| UT-08 | `RoundManager` | Round Win Condition | Player 2 health = 0 | Round ends; winner declared as Player 1 | Mock UI update callback |
+| UT-09 | `MenuNavigationController` | Button Navigation Valid | Select Start/Options/Quit buttons | Correct screen transition/action occurs | None |
+| UT-10 | `MenuNavigationController` | Invalid Button State (Negative) | Missing button reference/null selection | Error handled gracefully; no crash | Mock null refs |
+| UT-11 | `CharacterSelectController` | Character Selection Confirmation | Select valid character and confirm | Character lock-in stored for player | None |
+| UT-12 | `CharacterSelectController` | Duplicate/Unavailable Selection (Negative) | Select locked or invalid slot | UI warning shown or selection blocked | Mock locked state |
+| UT-13 | `AudioManager` | SFX Playback Trigger | Trigger attack/jump SFX | Correct audio clip plays once | Mock audio source |
+| UT-14 | `SettingsManager` | Save/Load Volume Settings | Set volume, save, reload | Saved value restored correctly | Mock persistence API optional |
+| UT-15 | `ProfilePersistenceManager` | Save Profile Data | Valid profile object | Save file created/updated successfully | Test file path |
+| UT-16 | `ProfilePersistenceManager` | Corrupt Save File Handling (Negative) | Invalid/corrupt save data | Default values loaded; error logged; no crash | Corrupt test file |
+| UT-17 | `InputRouter` | Controller Input Mapping | Controller button inputs | Correct in-game action events fired | Mock event listeners |
+| UT-18 | `InputRouter` | Unsupported Input Device (Negative) | Unknown device or disconnected controller | Fallback behavior / message displayed | Mock device state |
+
+#### Unit Test Process Notes
+
+- Each test will define:
+  - **Preconditions** (scene loaded, object initialized, required references set)
+  - **Inputs** (valid and invalid)
+  - **Expected outputs/results**
+  - **Pass/fail criteria**
+- For logic that depends on other systems (audio, file I/O, collision callbacks), mocks/stubs or controlled test scenes will be used.
+- Any discovered defect is logged with:
+  - Test ID
+  - Reproduction steps
+  - Expected vs actual result
+  - Severity
+  - Screenshot/video (if UI/visual)
+
+### 8.2.2 Unit Test Procedures
+
+This section provides the step-by-step procedure to perform unit testing for all modules.
+
+#### General Unit Test Procedure (applies to all UT tests)
+
+1. Open the **Pirate Fighterz** Unity project in the approved Unity version.
+2. Confirm the correct branch/build is checked out from version control.
+3. Open the Unity Test Framework (or the designated unit test scene if the test is manual).
+4. Select the target module/unit test (e.g., `UT-01 PlayerMovementController`).
+5. Enter the specified input(s) or trigger the required event(s).
+6. Observe outputs in:
+   - Game view
+   - Inspector values
+   - Console log
+   - Test runner pass/fail result
+7. Compare actual behavior to expected result.
+8. Record status as **Pass** or **Fail**.
+9. If failed, log defect and attach evidence (screenshot/console output/video).
+10. Reset the test state before running the next test.
+
+#### Example Manual Unit Procedure — `UT-01 PlayerMovementController`
+
+1. Start Unity and open the **Unit Test Scene – Player Movement**.
+2. Press **Play**.
+3. Use the configured left input (`A` or left arrow / controller stick left).
+4. Observe that the player moves left at the configured speed.
+5. Release input and confirm the player stops (idle state).
+6. Use the configured right input (`D` or right arrow / controller stick right).
+7. Observe that the player moves right at the configured speed.
+8. Compare movement speed and direction to the expected values in the test definition.
+9. Record result.
+10. Stop Play mode.
+
+**Expected Results:**
+
+- Left input → left movement
+- No input → idle/no drift
+- Right input → right movement
+- No errors in Console
+
+#### Example Manual Unit Procedure — `UT-16 ProfilePersistenceManager` (Negative: Corrupt Save)
+
+1. Navigate to the test save directory.
+2. Replace the normal save file with the provided corrupt test file.
+3. Launch the game in the **Persistence Test Scene** (or start the full app if required).
+4. Trigger profile load (start game / profile load button).
+5. Observe application behavior.
+6. Confirm the game does **not crash**.
+7. Confirm default profile/settings values are loaded (or recovery behavior per design).
+8. Confirm an error/warning is logged to console.
+9. Record result and console message.
+10. Restore a valid save file after test completion.
+
+**Expected Results:**
+
+- Graceful failure handling
+- No crash/freeze
+- Default/fallback data loaded
+- Error message logged
+
+---
+
+## 8.3 Integration Test Plan
+
+Integration testing verifies that units/modules correctly interact as they are combined into complete CSCs and, eventually, the full playable game flow. The emphasis is on interfaces, data flow, event timing, and cross-module behavior.
+
+Pirate Fighterz integration testing will proceed in staged combinations, including:
+
+- Module-to-module integration within a CSC
+- CSC-to-CSC integration (e.g., menu selection data passed into gameplay)
+- End-to-end game loop integration
+
+### 8.3.1 Integration Tests Planned
+
+#### Integration Sequence (Example)
+
+1. Test standalone modules (already covered by Unit Tests)
+2. Integrate **Gameplay Core**:
+   - Movement + Input
+   - Movement + Jump + Collision/Ground Check
+   - Combat + Health + KO/Win
+3. Integrate **UI/Menu Flow**:
+   - Main Menu + Character Select + Map Select
+4. Integrate **Persistence**:
+   - Settings/Profile + Menu + Gameplay load state
+5. Integrate **Full System Flow**:
+   - App Launch → Menu → Select Character/Map → Match → Results → Return to Menu
+
+#### Integration Test Table
+
+| Test ID | Integrated Components | Test Name | Inputs / Scenario | Expected Output | Notes |
+|---|---|---|---|---|---|
+| IT-01 | InputRouter + PlayerMovementController | Movement Input Integration | Keyboard/controller movement input | Correct movement response from live input | Positive |
+| IT-02 | PlayerMovement + GroundCheck + Jump | Jump Physics Integration | Jump on/off ground | Jump only when allowed; correct landing reset | Positive/Negative |
+| IT-03 | CombatController + Hitbox + HealthController | Attack-to-Damage Integration | Attack within range and out of range | Damage applies only on valid hits | Positive/Negative |
+| IT-04 | HealthController + RoundManager + UI HUD | KO and Round End Integration | Reduce health to 0 | Round ends, winner shown, controls lock/reset | Positive |
+| IT-05 | MenuNavigation + CharacterSelect + GameSceneLoader | Menu-to-Gameplay Transition | Select mode/character/map and start | Correct scene loads with selected values | Positive |
+| IT-06 | SettingsManager + AudioManager + UI Menu | Settings Persistence Integration | Change volume, save, relaunch | Audio settings persist and apply on startup | Positive |
+| IT-07 | ProfilePersistence + Unlock/Selection UI | Save/Load Content Integration | Unlock/select content, save/load | Content state restored correctly | Positive |
+| IT-08 | SceneLoader + Missing Asset Handling | Scene Transition Failure Handling (Negative) | Simulated missing reference/asset | Error handled gracefully; no silent crash | Negative |
+| IT-09 | Input + UI + Pause Menu + Gameplay | Pause/Resume Integration | Pause during match, resume | Game time/inputs suspend and resume correctly | Positive |
+| IT-10 | End-to-End Core Loop | Full Match Flow Integration | Start app, play match, finish, return | Entire flow completes without blocking defects | Acceptance precursor |
+
+### 8.3.2 Integration Test Procedures
+
+#### General Integration Test Procedure
+
+1. Check out the approved integration test build/branch from version control.
+2. Build the project (or open the designated integration test scene).
+3. Confirm all required assets and test data are present.
+4. Start the application or target test scene.
+5. Execute the test scenario using the inputs defined in the integration test table.
+6. Observe module interactions, UI transitions, and state changes.
+7. Record actual output and compare against expected output.
+8. Mark the test **Pass/Fail**.
+9. Log defects with reproduction steps and impacted components.
+10. Reset/relaunch the build before the next integration test.
+
+#### Example Integration Procedure — `IT-05 Menu-to-Gameplay Transition`
+
+1. Launch Pirate Fighterz.
+2. At the Main Menu, select **Start Game**.
+3. On Character Select, choose a valid character for Player 1 (and Player 2 if applicable).
+4. Confirm selection.
+5. On Map Select, choose a valid arena.
+6. Press **Begin Match**.
+7. Observe the scene transition to gameplay.
+8. Verify the selected characters and chosen map are loaded correctly.
+9. Verify HUD initializes (health bars, timer, round indicator).
+10. Record pass/fail.
+
+**Expected Results:**
+
+- No crash/freeze during transition
+- Correct scene loads
+- Selected characters/map appear correctly
+- HUD initializes correctly
+- Console free of blocking errors
+
+#### Example Integration Procedure — `IT-03 Combat-to-Health Integration`
+
+1. Open the **Combat Integration Test Scene**.
+2. Press **Play**.
+3. Position Player 1 within attack range of Player 2.
+4. Trigger a light attack.
+5. Confirm hit animation/effect occurs (if applicable).
+6. Verify Player 2 health decreases by the expected amount.
+7. Move Player 1 out of attack range.
+8. Trigger the same attack again.
+9. Verify Player 2 health does **not** change.
+10. Record pass/fail.
+
+**Expected Results:**
+
+- In-range attack applies damage exactly once per valid hit
+- Out-of-range attack applies no damage
+- No null reference or repeated-hit errors
+
+---
+
+## 8.4 Acceptance Test Plan
+
+Acceptance testing demonstrates that the **entire Pirate Fighterz system** satisfies the agreed project requirements and is ready for demonstration to the customer/instructor. These tests represent realistic end-user scenarios and will be used during final validation.
+
+Acceptance tests map directly to the major functional requirements in the SRS and include both positive and negative scenarios.
+
+### 8.4.1 Acceptance Tests Planned
+
+#### Acceptance Test Table
+
+| Test ID | Test Name | Scenario | Inputs | Expected Result |
+|---|---|---|---|---|
+| AT-01 | Application Launch and Main Menu | User launches game | Start executable | Main Menu loads with usable navigation and no crash |
+| AT-02 | Character Selection and Match Start | User selects characters and starts match | Valid selections | Match starts with correct characters/map |
+| AT-03 | Core Gameplay Controls | User moves, jumps, attacks, blocks | Normal gameplay inputs | Controls respond correctly and consistently |
+| AT-04 | Damage / KO / Round Win | Players exchange attacks to KO | Repeated valid attacks | Health decreases, KO occurs, winner displayed |
+| AT-05 | Match Completion Flow | Match ends and returns to menu/results | Complete one match | Results screen/flow works; can return to menu |
+| AT-06 | Settings Persistence | User changes settings and restarts | Adjust volume/options and relaunch | Settings persist across sessions |
+| AT-07 | Invalid Input Handling (Negative) | User enters unsupported/incorrect input sequence | Disconnect controller / invalid state | Game handles issue gracefully without crashing |
+| AT-08 | Corrupt/Missing Save Handling (Negative) | Launch with missing/corrupt save | Corrupt or remove save file | Defaults/recovery behavior occurs without crash |
+| AT-09 | Performance/Playability Check | Gameplay remains responsive | Play a full match | Acceptable frame rate and no major input lag on target PC |
+| AT-10 | End-to-End Demonstration | Full customer demo scenario | Launch → Menu → Select → Play → Finish → Exit | All required features demonstrated successfully |
+
+#### Acceptance Criteria
+
+The system is considered acceptable when:
+
+- All **critical** acceptance tests pass
+- No **blocking** or **crash-level** defects remain open
+- Core gameplay loop is fully functional
+- Major SRS requirements are covered by executed tests
+- Any deferred issues are documented and approved (if permitted)
+
+### 8.4.2 Final Acceptance Test Procedures
+
+#### Final Acceptance Demo Procedure (AT-10)
+
+1. Start the approved release/demo build of Pirate Fighterz on the target Windows PC.
+2. Verify the Main Menu appears and responds to keyboard/controller input.
+3. Navigate to character selection.
+4. Select valid characters for the match.
+5. Select a valid arena/map.
+6. Start the match and verify the gameplay scene loads properly.
+7. Demonstrate:
+   - Movement
+   - Jump
+   - Attack
+   - Block
+   - Health reduction on hit
+8. Continue gameplay until one player is defeated (KO).
+9. Verify the winner/round result is displayed correctly.
+10. Return to menu or proceed through post-match flow.
+11. Open settings and adjust one option (e.g., volume), save/apply change.
+12. Exit and relaunch game (if part of demo time allows) to verify persistence.
+13. Record results and customer/instructor signoff notes.
+
+**Expected Results:**
+
+- Full system demo completes without crashes or blocking defects
+- All demonstrated features behave per SRS
+- User can complete a playable match and return to menu
+
+---
+
+## 8.5 Test Configuration Control
+
+Testing artifacts and test execution will be managed under the project’s Configuration Management (CM) process using the team’s version control repository (e.g., Git/GitHub). Test-related materials will be maintained in dedicated project areas to ensure reproducibility and traceability.
+
+### Configuration Control Approach
+
+- **Separate test directories** will be used for:
+  - Unit tests (`/Tests/Unit` or Unity Test Framework folders)
+  - Integration tests (`/Tests/Integration`)
+  - Test data/stubs/mocks (`/Tests/TestData`, `/Tests/Mocks`)
+- Test scripts, test scenes, and test data files will be versioned alongside source code.
+- Tagged or approved commits/builds will be used for formal integration and acceptance testing.
+- The build used for testing must identify:
+  - Commit hash/version tag
+  - Unity version
+  - Target platform (Windows)
+  - Test date and tester
+- When testing a single module, all non-test modules should come from the latest approved checked-in version, while the module under test may be the current candidate version.
+- Any change to test cases/procedures after baseline approval must be committed and documented in the change log/repository history.
+
+This approach ensures the team can reproduce test runs and verify which software version was used for each test result.
+
+---
+
+## 8.6 Items Not Tested
+
+The following items are not fully tested (or are only partially tested) at this stage, along with rationale.
+
+| Item Not Tested / Partially Tested | Level(s) Affected | Rationale |
+|---|---|---|
+| Extensive multiplayer/network functionality (if not implemented) | Unit / Integration / Acceptance | Out of project scope for current build; Pirate Fighterz is local play for this version |
+| Cross-platform builds (macOS/Linux) | Acceptance | Target execution environment for this project is Windows PCs only |
+| Large-scale performance profiling across many hardware configurations | Acceptance | Team has limited hardware availability; only target/minimum available machines are tested |
+| Localization/internationalization | All | Not in current requirements scope |
+| Accessibility features beyond implemented controls/UI support | Acceptance | Additional accessibility enhancements are planned future work, not baseline requirements |
+| Rare hardware/controller compatibility edge cases (all brands/models) | Integration / Acceptance | Team can only test with available controllers/devices |
+| Malicious file tampering/security penetration testing | Integration / Acceptance | Not required for course scope and tooling/time constraints |
+
+If any of the above items become part of the final required scope, corresponding tests will be added and the matrix updated.
+
+---
+
+## 8.7 Test Verification Matrix
+
+This matrix maps SRS requirements (Section 6) to the tests that verify them. A single test may verify multiple requirements.
+
+> **Note:** Requirement numbers/text below should be aligned with your actual Section 6 numbering. Replace the sample requirement wording with your exact SRS text.
+
+| SRS Req. ID | Requirement Text (from Section 6) | Verifying Test(s) |
+|---|---|---|
+| FR-UI-01 | The system shall display a main menu on startup. | AT-01, IT-05 |
+| FR-UI-02 | The user shall be able to navigate menu options using keyboard/controller input. | UT-09, IT-01, AT-01 |
+| FR-UI-03 | The system shall allow character selection before match start. | UT-11, UT-12, IT-05, AT-02 |
+| FR-UI-04 | The system shall allow map/arena selection before gameplay begins. | IT-05, AT-02 |
+| FR-GP-01 | The player character shall move left/right in response to input. | UT-01, IT-01, AT-03 |
+| FR-GP-02 | The player character shall jump when jump input is received while grounded. | UT-02, UT-03, IT-02, AT-03 |
+| FR-GP-03 | The player shall be able to attack and damage an opponent when in range. | UT-04, UT-05, IT-03, AT-03, AT-04 |
+| FR-GP-04 | The player shall be able to block incoming attacks. | UT-06, AT-03 |
+| FR-GP-05 | The system shall track player health and trigger KO at zero health. | UT-07, IT-04, AT-04 |
+| FR-GP-06 | The system shall determine and display round/match winner. | UT-08, IT-04, AT-04, AT-05 |
+| FR-CP-01 | The system shall save and load user settings. | UT-14, IT-06, AT-06 |
+| FR-CP-02 | The system shall save and load player/profile data (if included). | UT-15, UT-16, IT-07, AT-08 |
+| NFR-01 | The system shall not crash on invalid input or missing data conditions. | UT-10, UT-16, IT-08, AT-07, AT-08 |
+| NFR-02 | The game shall run with acceptable responsiveness on target hardware. | AT-09 |
+| SYS-01 | The system shall support the complete game flow from launch to match completion. | IT-10, AT-10 |
+
+---
+
+## Optional Appendix (Recommended): Pass/Fail Results Log
+
+If you want to make this look more like an industry test plan + procedure combo, add a short appendix after Section 8.7 with a results log table like this:
+
+| Test ID | Date | Tester | Build Version | Result (Pass/Fail) | Defect ID(s) / Notes |
+|---|---|---|---|---|---|
+| UT-01 | YYYY-MM-DD | Your Name | v0.x.x | Pass | — |
+| IT-05 | YYYY-MM-DD | Your Name | v0.x.x | Fail | DEF-003: Character select data not passed to game scene |
+| AT-10 | YYYY-MM-DD | Your Name | v1.0-demo | Pass | Customer demo completed successfully |
