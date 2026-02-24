@@ -1,4 +1,4 @@
-8.0 Software Test Plan
+8.0 Test Procedure Document
 8.1 Introduction
 
 This section defines the Software Test Plan for Pirate Fighterz. It describes the tests used to verify the project at the unit, integration, and acceptance levels.
@@ -234,8 +234,6 @@ Verify winner/result display.
 
 Return to menu/post-match flow.
 
-(Optional) Change a setting and relaunch to verify persistence.
-
 Record results and signoff notes.
 
 8.5 Test Configuration Control
@@ -276,8 +274,6 @@ Changes to test procedures are committed and tracked in version history
 | Advanced accessibility features not implemented | Future enhancement               |
 | Full security/penetration testing               | Not required for class scope     |
 8.7 Test Verification Matrix
-
-Replace the sample requirement IDs/text below with your exact Section 6 SRS requirement IDs.
 | SRS Req. ID | Requirement (Short Form)         | Verifying Test(s)                 |
 | ----------- | -------------------------------- | --------------------------------- |
 | FR-UI-01    | Main menu displays on startup    | AT-01, IT-05                      |
