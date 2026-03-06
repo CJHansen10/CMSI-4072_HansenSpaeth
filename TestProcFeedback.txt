@@ -1,0 +1,104 @@
+
+Documentation Feedback ~ Deliverable #3
+Test Procedure Document
+CMSI 4072 Spring 2026 ~ Pirate Fighterz
+=======================================
+
+A. Test steps are clearly documented and precise
+   Strengths
+      Procedures are step-by-step for unit, integration, and acceptance.
+      They specify actions, observation points, and recording of results.
+      Examples make execution concrete (e.g., UT-01 movement,
+         UT-16 corrupt save, IT-05 menu->gameplay).
+      The doc covers startup, environment reset, and pass/fail logging
+         in a repeatable sequence.
+   Suggestions
+      Add explicit preconditions and postconditions for every test
+         (seeded data, player state, files to restore).
+      Specify expected results precisely (strings, UI ids, value deltas)
+         to replace generic “verify success” phrasing.
+      Define evidence to collect (screens, logs, build hash) and
+         where to store it per run.
+      Include negative paths more broadly in integration and
+         acceptance (timeouts, asset corruption, input loss).
+
+B. Clear mapping between requirements and test cases
+   [or between user stories and test cases]
+   Strengths
+      A verification matrix links SRS IDs to unit, integration, and
+         acceptance tests (e.g., FR-GP-02 -> UT-02/UT-03/IT-02/AT-03).
+      Acceptance criteria reference the matrix coverage at sign-off.
+   Suggestions
+      Add coverage status and priority per requirement
+         (full/partial/not covered, P0–P2).
+      Include non-functional and system items with measurable
+         targets (e.g., latency, FPS, memory).
+      Provide bi-directional trace: from each test to the exact SRS
+         clause and from SRS to all tests.
+      Link to evidence artifacts (result files, logs) from the matrix
+         after execution.
+
+C. All assumptions and dependencies are explicitly captured
+   Strengths
+      Configuration control lists repo location, tagged builds, Unity
+         version, and how test records are kept.
+      “Items not tested” explains scope limits (platforms, network,
+         accessibility, security).
+   Suggestions
+      Centralize assumptions: target OS/hardware, controller types,
+         screen resolution, audio devices, and data seeds.
+      List external dependencies: file paths for saves, asset packs,
+         email/logging services (if any), and mock data sources.
+      Define reset/cleanup rules between tests (restore saves, clear
+         caches, rebuild play mode).
+      Capture risk and fallback for missing assets or API outages
+         in negative scenarios.
+
+D. Test steps checklist exists
+   Strengths
+      The document already acts as a checklist: 18 unit tests, 10
+         integration tests, and 10 acceptance tests are enumerated.
+      Each group includes a general procedure and concrete examples
+         that testers can follow
+   Suggestions
+      Convert the lists into a run checklist (Step ID, Date, Tester,
+         Build, Result, Evidence link, Defect ID).
+      Add iteration tags (I1/I2) and blocking/critical flags to help
+         coordinate re-runs and triage.
+      Provide a daily roll-up sheet with counts passed/failed/blocked
+         and high-risk areas.
+
+E. Test steps checklist completed [for second iteration]
+   Strengths
+
+   Suggestions
+
+
+OVERALL ASSESSMENT:
+   Category                          Points
+   A. documented                        2.0
+   B. mapping                           2.0
+   C. assumptions/dependencies          2.0
+   D. checklist                         4.0
+                                     ======
+   Subtotal                            10.0
+   ------------------------------------------------------
+   Total Percentage:  10/10 = 100% which is an A-plus on this deliverable
+
+Your STP is well structured and nearly execution-ready. It covers
+unit, integration, and acceptance, includes clear procedures, and
+provides a solid verification matrix. To make it audit-tight for a
+second iteration, add an explicit assumptions section, and enhance the
+matrix with coverage status metrics.
+
+VERY nice work on this, and in a text document, no less!  Good on ya!
+
+
+SECOND PASS ASSESSMENT
+   Category                          Points
+   A - D. updated previous              3.0
+   E. checklist completed               7.0
+                                     ======
+   Subtotal                            10.0
+   ------------------------------------------------------
+   Total Percentage:  10/10 = 100% which is an A-plus on this deliverable
